@@ -1,0 +1,44 @@
+version: "3.1"
+rules:
+  - rule: greet user
+    steps:
+      - intent: greet
+      - action: utter_greet_and_ask_name
+
+  - rule: respond to name
+    steps:
+      - intent: provide_name
+      - action: utter_meet_and_ask_service
+
+  - rule: ask activity preference
+    steps:
+      - intent: travel_request_suggestions
+      - action: utter_ask_activity_preference
+
+  - rule: respond to activity choice
+    steps:
+      - or:
+          - intent: visting_museums
+          - intent: going_to_surfing
+          - intent: going_to_ski
+          - intent: plan_family_trip
+          - intent: plan_a_retreat
+      - action: action_suggestions_by_activity
+
+  - rule: ask for budget after place selection
+    steps:
+      - intent: choose_place
+      - action: utter_ask_budget
+
+  - rule: suggest based on budget
+    steps:
+      - intent: provide_budget
+      - action: action_suggest_area_by_place_and_budget
+
+  - rule: handle neutral or appreciation
+    steps:
+      - or:
+          - intent: provide_neutral_answer
+          - intent: appreciate_response
+      - action: utter_afirm_and_exit
+

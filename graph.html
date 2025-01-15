@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rasa Core Visualisation</title>
+    <script src="https://dagrejs.github.io/project/dagre-d3/latest/dagre-d3.min.js"></script>
+    <script src="https://dagrejs.github.io/project/dagre/latest/dagre.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://dagrejs.github.io/project/graphlib-dot/v0.6.3/graphlib-dot.js"></script>
+</head>
+<body>
+<div id="errormsg" style="color: #b00"></div>
+<svg>
+    <style id="graph-style">
+        .node.invisible > rect {
+            display: none;
+        }
+
+        .node.start > rect {
+            fill: #7f7;
+            rx: 30;
+            ry: 18;
+        }
+
+        .node.end > rect {
+            fill: #f77;
+            rx: 30;
+            ry: 18;
+        }
+
+        .node:not(.active) > rect, .node:not(.active) > .label {
+            opacity: 0.4;
+        }
+
+        .edgePath:not(.active) path {
+            opacity: 0.4;
+        }
+
+        .node.ellipsis > rect {
+            fill: #CCC;
+        }
+
+        .node.intent > rect {
+            fill: #7ff;
+        }
+
+        .node.dashed > rect {
+            stroke-dasharray: 5;
+        }
+
+        text {
+            font-weight: 300;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serf, serif;
+            font-size: 14px;
+            color: #1f1d1d;
+        }
+
+        .node rect {
+            stroke: #444;
+            fill: #fff;
+            stroke-width: 1.5px;
+        }
+
+        .edgePath path {
+            stroke: #333;
+            stroke-width: 1.5px;
+        }
+
+        svg {
+            position: fixed;
+            top: 10px;
+            left: 0;
+            height: 100%;
+            width: 100%
+        }
+    </style>
+    <g></g>
+</svg>
+<script>
+
+  function serveGraph() {
+    let oldInputGraphValue;
+
+    const url = 'visualization.dot';
+    const refreshInterval = 500;
+
+    // trigger a refresh by fetching an updated graph
+    setInterval(function () {
+      fetch(url).then(r => r.text()).then(dot => {
+        document.getElementById('errormsg').innerHTML = '';
+        if (oldInputGraphValue === dot) return;
+
+        oldInputGraphValue = dot;
+        drawGraph(dot);
+      }).catch(err => {
+        document.getElementById('errormsg').innerHTML =
+          'Failed to update plot. (' + err.message + ')';
+      });
+    }, refreshInterval);
+  }
+
+  function drawGraph(graph) {
+    let g = graphlibDot.read(graph);
+    // Set margins, if not present
+    if (!g.graph().hasOwnProperty("marginx") &&
+      !g.graph().hasOwnProperty("marginy")) {
+      g.graph().marginx = 20;
+      g.graph().marginy = 20;
+    }
+    g.graph().transition = function (selection) {
+      return selection.transition().duration(300);
+    };
+    // Render the graph into svg g
+    d3.select("svg g").call(render, g);
+  }
+  // Set up zoom support
+  const svg = d3.select("svg"),
+    inner = d3.select("svg g"),
+    zoom = d3.zoom().on("zoom", function () {
+      inner.attr("transform", d3.event.transform);
+    });
+  svg.call(zoom);
+
+  // Create and configure the renderer
+  const render = dagreD3.render();
+
+  let isClient = false;
+  isClient = true;
+
+  if (isClient) {
+    // Mark all nodes and their edges as active
+    cssRules = document.getElementById('graph-style').sheet.cssRules;
+    cssRules[3].style.opacity = 1;
+    cssRules[4].style.opacity = 1;
+
+    let graph;
+    graph = `digraph  {
+0 [class="start active", fillcolor=green, fontsize=12, label=START, style=filled];
+"-1" [class=end, fillcolor=red, fontsize=12, label=END, style=filled];
+1 [class="", fontsize=12, label=utter_greet_and_ask_name];
+2 [class="", fontsize=12, label=utter_meet_and_ask_service];
+3 [class="", fontsize=12, label=utter_ask_activity_preference];
+4 [class="", fontsize=12, label=action_suggestions_by_activity];
+5 [class="", fontsize=12, label=utter_ask_budget];
+6 [class="", fontsize=12, label=action_suggest_area_by_place_and_budget];
+7 [class="", fontsize=12, label=utter_afirm_and_exit];
+74 [class="", fontsize=12, label=action_suggestions_by_activity];
+87 [class="", fontsize=12, label="..."];
+88 [class="", fontsize=12, label=utter_ask_budget];
+90 [class="", fontsize=12, label=action_suggest_area_by_place_and_budget];
+96 [class="", fontsize=12, label=utter_greet_and_ask_name];
+98 [class="", fontsize=12, label=utter_meet_and_ask_service];
+100 [class="", fontsize=12, label=utter_ask_activity_preference];
+111 [class=intent, fillcolor=lightblue, label=Hey, shape=rect, style=filled];
+112 [class=intent, fillcolor=lightblue, label="Where could I spend my time this holiday?", shape=rect, style=filled];
+113 [class=intent, fillcolor=lightblue, label="I would really love to see the Eifel Tower", shape=rect, style=filled];
+114 [class=intent, fillcolor=lightblue, label=Aha, shape=rect, style=filled];
+115 [class=intent, fillcolor=lightblue, label="Lovely, thanks!", shape=rect, style=filled];
+116 [class=intent, fillcolor=lightblue, label="Friends are calling me Daniel", shape=rect, style=filled];
+117 [class=intent, fillcolor=lightblue, label="Where should I go for a city-break?", shape=rect, style=filled];
+118 [class=intent, fillcolor=lightblue, label="I prefer visting museums", shape=rect, style=filled];
+119 [class=intent, fillcolor=lightblue, label="I love going to surf", shape=rect, style=filled];
+120 [class=intent, fillcolor=lightblue, label="I love going to ski", shape=rect, style=filled];
+121 [class=intent, fillcolor=lightblue, label="I want just a family trip", shape=rect, style=filled];
+122 [class=intent, fillcolor=lightblue, label="Need a retreat", shape=rect, style=filled];
+123 [class=intent, fillcolor=lightblue, label="Visiting museums", shape=rect, style=filled];
+124 [class=intent, fillcolor=lightblue, label="I love going to surf", shape=rect, style=filled];
+125 [class=intent, fillcolor=lightblue, label="I love going to ski", shape=rect, style=filled];
+126 [class=intent, fillcolor=lightblue, label="I want just a family trip", shape=rect, style=filled];
+127 [class=intent, fillcolor=lightblue, label="I want just a retreat", shape=rect, style=filled];
+128 [class=intent, fillcolor=lightblue, label="I will go with Rome", shape=rect, style=filled];
+129 [class=intent, fillcolor=lightblue, label="I have a medium", shape=rect, style=filled];
+130 [class=intent, fillcolor=lightblue, label="/utter_neutral_response", shape=rect, style=filled];
+131 [class=intent, fillcolor=lightblue, label="Looking forward to go there, thank you!", shape=rect, style=filled];
+132 [class=intent, fillcolor=lightblue, label="I want to explore Romania more", shape=rect, style=filled];
+133 [class=intent, fillcolor=lightblue, label="My budget is low", shape=rect, style=filled];
+134 [class=intent, fillcolor=lightblue, label="A ioi", shape=rect, style=filled];
+135 [class=intent, fillcolor=lightblue, label="Thank you for your recommandation!", shape=rect, style=filled];
+136 [class=intent, fillcolor=lightblue, label=Hello, shape=rect, style=filled];
+137 [class=intent, fillcolor=lightblue, label="Call me Laurentiu", shape=rect, style=filled];
+138 [class=intent, fillcolor=lightblue, label="I want to give my family a trip", shape=rect, style=filled];
+139 [class=intent, fillcolor=lightblue, label="I prefer visting museums", shape=rect, style=filled];
+140 [class=intent, fillcolor=lightblue, label="I love going to surf", shape=rect, style=filled];
+141 [class=intent, fillcolor=lightblue, label="Going to ski", shape=rect, style=filled];
+142 [class=intent, fillcolor=lightblue, label="I want just a family trip", shape=rect, style=filled];
+143 [class=intent, fillcolor=lightblue, label="Need a retreat", shape=rect, style=filled];
+0 -> 87  [class="", key=NONE, label=""];
+0 -> 111  [class="", key=0];
+0 -> 112  [class="", key=0];
+0 -> 113  [class="", key=0];
+0 -> 114  [class="", key=0];
+0 -> 115  [class="", key=0];
+1 -> 116  [class="", key=0];
+2 -> "-1"  [class="", key=NONE, label=""];
+2 -> 117  [class="", key=0];
+3 -> 118  [class="", key=0];
+3 -> 119  [class="", key=0];
+3 -> 120  [class="", key=0];
+3 -> 121  [class="", key=0];
+3 -> 122  [class="", key=0];
+3 -> 123  [class="", key=0];
+3 -> 124  [class="", key=0];
+3 -> 125  [class="", key=0];
+3 -> 126  [class="", key=0];
+3 -> 127  [class="", key=0];
+4 -> 128  [class="", key=0];
+5 -> 129  [class="", key=0];
+6 -> "-1"  [class="", key=NONE, label=""];
+6 -> 130  [class="", key=0];
+6 -> 131  [class="", key=0];
+7 -> "-1"  [class="", key=NONE, label=""];
+74 -> "-1"  [class="", key=NONE, label=""];
+87 -> 132  [class="", key=0];
+87 -> 133  [class="", key=0];
+87 -> 134  [class="", key=0];
+87 -> 135  [class="", key=0];
+87 -> 136  [class="", key=0];
+87 -> 137  [class="", key=0];
+87 -> 138  [class="", key=0];
+87 -> 139  [class="", key=0];
+87 -> 140  [class="", key=0];
+87 -> 141  [class="", key=0];
+87 -> 142  [class="", key=0];
+87 -> 143  [class="", key=0];
+88 -> "-1"  [class="", key=NONE, label=""];
+90 -> "-1"  [class="", key=NONE, label=""];
+96 -> "-1"  [class="", key=NONE, label=""];
+98 -> "-1"  [class="", key=NONE, label=""];
+100 -> "-1"  [class="", key=NONE, label=""];
+111 -> 1  [class="", key=0];
+112 -> 3  [class="", key=0];
+113 -> 5  [class="", key=0];
+114 -> 7  [class="", key=0];
+115 -> 7  [class="", key=0];
+116 -> 2  [class="", key=0];
+117 -> 3  [class="", key=0];
+118 -> 4  [class="", key=0];
+119 -> 4  [class="", key=0];
+120 -> 4  [class="", key=0];
+121 -> 4  [class="", key=0];
+122 -> 4  [class="", key=0];
+123 -> 74  [class="", key=0];
+124 -> 74  [class="", key=0];
+125 -> 74  [class="", key=0];
+126 -> 74  [class="", key=0];
+127 -> 74  [class="", key=0];
+128 -> 5  [class="", key=0];
+129 -> 6  [class="", key=0];
+130 -> 7  [class="", key=0];
+131 -> 7  [class="", key=0];
+132 -> 88  [class="", key=0];
+133 -> 90  [class="", key=0];
+134 -> 7  [class="", key=0];
+135 -> 7  [class="", key=0];
+136 -> 96  [class="", key=0];
+137 -> 98  [class="", key=0];
+138 -> 100  [class="", key=0];
+139 -> 74  [class="", key=0];
+140 -> 74  [class="", key=0];
+141 -> 74  [class="", key=0];
+142 -> 74  [class="", key=0];
+143 -> 74  [class="", key=0];
+}
+`;
+    drawGraph(graph);
+  } else {
+    serveGraph();
+  }
+
+
+</script>
+</body>
+</html>

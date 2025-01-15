@@ -1,0 +1,59 @@
+version: "3.1"
+
+stories:
+  - story: end-to-end-happy-flow
+    steps:
+      - intent: greet
+      - action: utter_greet_and_ask_name
+      - intent: provide_name
+      - action: utter_meet_and_ask_service
+      - intent: travel_request_suggestions
+      - action: utter_ask_activity_preference
+      - or:
+        - intent: visting_museums
+        - intent: going_to_surfing
+        - intent: going_to_ski
+        - intent: plan_family_trip
+        - intent: plan_a_retreat
+      - action: action_suggestions_by_activity
+      - intent: choose_place
+      - action: utter_ask_budget
+      - intent: provide_budget
+      - action: action_suggest_area_by_place_and_budget
+      - or: 
+        - intent: utter_neutral_response
+        - intent: appreciate_response
+      - action: utter_afirm_and_exit
+
+  - story: greet-flow
+    steps:
+      - intent: greet
+      - action: utter_greet_and_ask_name
+      - intent: provide_name
+      - action: utter_meet_and_ask_service
+
+  - story: activity-choice-flow
+    steps:
+      - intent: travel_request_suggestions
+      - action: utter_ask_activity_preference
+      - or:
+          - intent: visting_museums
+          - intent: going_to_surfing
+          - intent: going_to_ski
+          - intent: plan_family_trip
+          - intent: plan_a_retreat
+      - action: action_suggestions_by_activity
+
+  - story: choose-place-and-budget-flow
+    steps:
+      - intent: choose_place
+      - action: utter_ask_budget
+      - intent: provide_budget
+      - action: action_suggest_area_by_place_and_budget
+
+  - story: exit-with-neutral-or-appreciation
+    steps:
+      - or:
+          - intent: provide_neutral_answer
+          - intent: appreciate_response
+      - action: utter_afirm_and_exit

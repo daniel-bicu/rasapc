@@ -1,0 +1,137 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - Hi
+    - Hello
+    - Hey
+    - Ola
+    - Good morning
+    - Good afternoon
+
+- intent: uncertainty_of_context
+  examples: |
+    - Who are you?
+    - What can you do?
+    - I do not understand who are you
+    - Who is there?
+
+- intent: goodbye
+  examples: |
+    - Bye
+    - See you soon!
+    - Have a nice day
+    - Ciao
+    - Looking forward to discuss next time
+
+- intent: provide_name
+  examples: |
+    - Hey there, my name is [Paul](name)
+    - My name is [Daniel](name)
+    - I am [Madalina](name)
+    - Call me [Laurentiu](name)
+    - You can call me [Andra](name)
+    - Friends are calling me [Daniel](name)
+    - Lovely to meet you, I am [David](name)
+    - Nice to meet you, my name is [John](name)
+    - My name is [Daniel](name)
+
+- intent: travel_request_suggestions
+  examples: |
+    - Give me some travel suggestions for this holiday
+    - Where should I travel this vacation?
+    - Where could I spend my time this holiday?
+    - Any holiday plans?
+    - What suggestions could you offer for a vacation?
+    - Where should I go for a city-break?
+    - Where should I go with my family this summer?
+    - I want to go on a trip
+    - I want to plan a trip
+    - I want to give my family a trip
+
+- intent: give_activity
+  examples: |
+    - I love going to [surf](activity)
+    - I prefer visting [museums](activity)
+    - I want just a [family trip](activity)
+    - I need a [retreat](activity)
+
+- intent: visting_museums
+  examples: |
+    - I prefer visting [museums](activity)
+    - Visiting [museums](activity)
+
+- intent: going_to_surfing
+  examples: |
+    - I love going to [surf](activity)
+    - Going to [surf](activity)
+
+- intent: going_to_ski
+  examples: |
+    - I love going to [ski](activity)
+    - Going to [ski](activity)
+
+- intent: plan_family_trip
+  examples: |
+    - I want just a [family trip](activity)
+    - Going on a [family trip](activity)
+
+- intent: plan_a_retreat
+  examples: |
+    - I want just a [retreat](activity)
+    - Would love a [retreat](activity)
+    - Need a [retreat](activity)
+
+- intent: choose_place
+  examples: |
+    - I will choose the [Paris](place)
+    - I will go with [Bali](place)
+    - Let's go in [New York](place)
+    - [Hawaii](place) sounds good
+    - I would really love to see [Cyprus](place)
+    - I want to explore [Romania](place) more
+    - I am from [Bulgaria](place)
+    - The [Alpines](place) mountains are amazing
+    - I would really love to see the [Eifel Tower](place)
+    - I wish someday I can see [Liberty Statue](place)
+    - There are mistical places like [Tokyo](place)
+    - There is the [Louvre](place) museum out there
+    - I want to go the [Golden Sands](place) in Bulgaria
+
+- intent: provide_budget
+  examples: |
+    - My budget is [low](budget)
+    - I have a [medium](budget)
+    - I can spend [high](budget)
+    - I afford [medium](budget)
+    - My budget is [high](budget)
+
+- intent: provide_neutral_answer
+  examples: |
+    - Aha
+    - Ok
+    - I see
+    - I am not sure
+    - I do not know
+    - That could be something
+    - Hmm
+    - A ioi
+
+- intent: appreciate_response
+  examples: |
+    - Wow, amazing, I would love go there!
+    - Thank you for your recommandation!
+    - Such a good recommendation!
+    - Lovely, thanks!
+    - Looking forward to go there, thank you!
+    - Thank you!
+
+- intent: ask_for_safety_tips
+  examples: |
+    - Tell me some safety tips
+    - Any safety advice?
+    - Tips for staying safe?
+    - How to protect myself there?
+    - Any tips to keep myself protected?
+    - How could I be sure I am safe?
+    - List me some safety tips

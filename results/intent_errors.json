@@ -1,0 +1,26 @@
+[
+  {
+    "text": "I love going to surf",
+    "intent": "give_activity",
+    "intent_prediction": {
+      "name": "going_to_surfing",
+      "confidence": 0.7373183369636536
+    }
+  },
+  {
+    "text": "I prefer visting museums",
+    "intent": "give_activity",
+    "intent_prediction": {
+      "name": "visting_museums",
+      "confidence": 0.753951370716095
+    }
+  },
+  {
+    "text": "I want just a family trip",
+    "intent": "give_activity",
+    "intent_prediction": {
+      "name": "plan_family_trip",
+      "confidence": 0.6996963024139404
+    }
+  }
+]

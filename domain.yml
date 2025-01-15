@@ -1,0 +1,110 @@
+version: '3.1'
+intents:
+- appreciate_response
+- ask_for_safety_tips
+- choose_place
+- give_activity
+- going_to_ski
+- going_to_surfing
+- goodbye
+- greet
+- plan_a_retreat
+- plan_family_trip
+- provide_budget
+- provide_name
+- provide_neutral_answer
+- travel_request_suggestions
+- visting_museums
+- uncertainty_of_context
+
+entities:
+- budget
+- name
+- activity
+- place
+
+slots:
+  name:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: name
+    - type: from_text
+
+  activity:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: activity
+    - type: from_text
+
+  place:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: place
+
+  budget:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: budget
+    - type: from_text
+
+responses:
+  utter_greet_and_ask_name:
+  - text: Hi! What's your name?
+  - text: Hello! Nice too see you here, what is your name?
+  - text: Hi, I am here to help you! Who are you?
+  - text: Hi there, let's connect each other, I am Rasa Bot, what about you?
+
+  utter_meet_and_ask_service:
+  - text: Nice to see you, {name}. How can I help you?
+  - text: Lovely to meet you, {name}. What do you have in mind for next holiday?
+  - text: Nice to meet you, {name}. {name}, I am here to help you. Let me know what are you thinking
+  - text: Nice to meet you, {name}. What would you like to do?
+
+  utter_imabot:
+  - text: I am a bot, even though I am here for help!
+  - text: Even though I am not a human, I am very smart Rasa Bot for travel.
+
+  utter_ask_activity_preference:
+  - text: Let's start and see what would you love more. Below is a list. Choose your preference
+    buttons:
+    - title: museums
+      payload: '/visting_museums{{"activity": "museums"}}'
+    - title: surfing
+      payload: '/going_to_surfing{{"activity": "surfing"}}'
+    - title: ski
+      payload: '/going_to_ski{{"activity": "ski"}}'
+    - title: family trip
+      payload: '/plan_family_trip{{"activity": family trip}}'
+    - title: retreat
+      payload: '/plan_a_retreat{{"activity": retreat}}'
+
+  utter_ask_budget:
+  - text: Great choice! What's your budget for this trip? Please let me know if is low, medium or high.
+  - text: Nice stuff, how much would you spend on this? Is more like low, medium or high?
+  - text: Ok, now lets see what is your budget for that? Low, medium or high?
+
+  utter_afirm_and_exit:
+  - text: Amazing! I am happy that I could help, {name}! See you soon!
+
+  utter_neutral_response:
+  - text: Cool!
+  - text: Glad that we could talk, I am here anyway!
+  - text: I am just here, ask for more if you need help!
+
+actions:
+- action_suggestions_by_activity
+- action_suggest_area_by_place_and_budget
+- action_safety_tips
+- action_default_fallback
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
